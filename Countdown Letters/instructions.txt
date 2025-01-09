@@ -1,0 +1,112 @@
+This project uses the same British gameshow as Project 2, but this time we are working with the letters puzzle. In the letters puzzle, contestants are given 9 random letters (3-5 of which are vowels). The contestants try to make the longest word they can using only the letters given.
+
+For example, if the random letters are: EUIORPTMC, the first user might come up with TRIM and the second user might come up with COMPUTER. Both are valid words (they're both actual words, and they use only the letters given). Since the second player's word is longer, they win. If only one player's word is valid, that player wins. The players tie if neither word is valid, or they're both valid and the same length.
+
+
+
+Computer Program
+Similar to our last game, the program should start by asking the user for a seed, to provide different random letters each time, and also allow for testing and the auto-grader.
+
+The program then asks for the number of vowels. This should be a number between 3 and 5. You may assume the user enters a number, but it might be an invalid number. If the user enters a number outside that range, display an error message and ask again.
+
+The program will then display the random letters on the screen (the next section discusses selecting those random letters). The program prompts both users to enter their words. After both players have entered their words, it will display a message if either player's word is invalid, then display which player is the winner, and finally display the longest possible word with those letters.
+
+Lastly, the program will ask the user if they want to play again. If the user enters y, it should repeat the game. If the user enters n or any other letter, the program should exit.
+
+Enter random seed: 123
+
+Let's play Countdown!
+How many vowels would you like (3-5)? 3
+The letters are: EEASQSTHR
+Player 1, enter your word: TEASE
+Player 2, enter your word: HEAT
+Player 1 wins!
+The longest possible word is: THERESSA
+Do you want to play again (y/n)? n
+User Input
+When asking for a seed, you may assume the user enters a valid integer. 
+
+When you ask for the number of vowels, you may assume the user enters an integer, but it may not be between 3 and 5. If it's not, you should display an error message and ask again.
+
+Words may be entered in any capitalization, and the program should be case insensitive (so it should treat lower case and upper case the same).
+
+Lastly, when the user chooses to play again, if they enter 'y' (in either case), you should play again. If they enter any other character, the program should exit.
+
+Random Letters
+Similar to Project 2, we will use the included chooseRandomNumber function to choose random numbers, in order to select the random letters.
+
+The vowels are A, E, I, O, and U. That means Y counts as a consonant. To make it easier to find words, we don't want every letter to have equal odds of being chosen (making a Z and a T equally likely means we'd often get letters with very few possible words). To solve this, we'll use the letter frequency published at http://www.thecountdownpage.com/letters.htm. The template you're given includes the functions fullSetOfVowels() and fullSetOfConsonants() that produce a string with the appropriate letters, repeated as many times as appropriate to have the letter frequency. We'll then use random numbers to choose one of the letters, and remove it from the list so it can't be used again. (For example, since there's only one Z, if Z is chosen and removed it won't be possible for it to be chosen again. Similarly, since there are only two Bs, if a B is chosen and removed, there will only be one B left to choose, making it less likely.)
+
+It's easier to see an example of this in action. Let's use a shorter list of letters to make it simpler, let's pretend the letter frequency is one B, two Cs and two Ds, so our fullSetOfConsonants() would return "BCCDD". We would choose an index 0 through 4 at random, let's say 3. That means we add the letter at index 3 (a D) to our string of letters to show the user. Then we remove that letter from the string of letters to choose from (so it's not chosen again). Now the string of letters to choose from is "BCCD". With only 4 letters left, we'd choose an index 0 through 3 at random, and repeat that process until we had chosen the needed letters.
+
+The following line of code removes the letter at the given index (if you're interested in the details, it specifies to start at location index, and replace 1 character with the empty string):
+
+letters.replace(index, 1, "");
+
+
+To ensure that the random letters match the autograder, you should only call the seed function once, at the beginning of the program. (Don't call it again if the user chooses to play another round.) In each round, start with the complete set of consonants and vowels (not missing letters that were removed in the previous round) and choose vowels first and then choose the consonants.
+
+Valid Words
+To be valid, a word must use only the 9 letters provided. Each letter can only be used once, but a letter listed multiple times may be used up to that many times (in the example above with letters EEASQSTHR, TEST is not valid because there is only one T available to use, while TEASE is fine because there are two Es available).
+
+To check this, I recommend creating a function that takes the available letters and the potential word. For each letter in the word, make sure that the letter is one of the available letters. In the string of available letters, replace that letter with a space so it won't be available to be used again. If you ever find a letter that's not available, you know that the word is not valid. If you get through the whole word successfully, then it uses only valid letters.
+
+Additionally, to be valid, the user must have entered an actual word. There is a file provided in your workspace, words.txt. That file contains a list of English words (just over 420,000 words in the file). You must ensure that the word entered is one of the words listed. Information about reading from a file is included later.
+
+Reading that many words from the file is very slow. It should be read once, and saved in a vector or array of strings, so you can loop through the words more quickly. If using a vector, pass the vector to functions by reference so that it doesn't make copies of the large vector (arrays are always passed by reference).
+
+Longest Word
+To find the longest word, use the list of words (from words.txt) and find the longest word that uses only valid letters. If there is more than one word of the same length, display the first one you found (that will be the first alphabetically, since the list of words is in alphabetical order).
+
+Input from a File
+As discussed in class, you can use create an ifstream to get input from a file (short for input file stream). You'll need to #include <fstream> to do this. Once you do that, your ifstream object works just like cin, but it reads input from the file rather than the keyboard. For example:
+
+ifstream fileIn;
+fileIn.open("myfile.txt");
+fileIn >> myInt;
+This reads an integer at the beginning of myfile.txt and stores it in myInt.
+
+The function eof can tell you if you're at the end of a file. If you have an ifstream called fileIn, then fileIn.eof() will return true if you've reached the end of the file, and will return false otherwise.
+
+Formatting
+Your code should be properly formatted, as described in this document, though you may make a few exceptions described here:
+
+In this project, you should use functions to break up code into separate tasks, avoiding repetition and sections of code that are too long.
+
+Sample Program Run
+Enter random seed: 7
+Let's play Countdown!
+How many vowels would you like (3-5)? 5
+The letters are: OOOOEMSLB
+Player 1, enter your word: BOOM
+Player 2, enter your word: MOOS
+Tie game.
+The longest possible word is: BLOOMS
+
+Do you want to play again (y/n)? y
+How many vowels would you like (3-5)? 3
+The letters are: AUEGRPKTR
+Player 1, enter your word: great
+Player 2, enter your word: TRUE
+Player 1 wins!
+The longest possible word is: PARTURE
+
+Do you want to play again (y/n)? y
+How many vowels would you like (3-5)? 3
+The letters are: EAAFTTNTL
+Player 1, enter your word: neat
+Player 2, enter your word: later
+Player 2's word is not valid.
+Player 1 wins!
+The longest possible word is: ATLANTE
+
+Do you want to play again (y/n)? y
+How many vowels would you like (3-5)? 3
+The letters are: IEAZTFDTN
+Player 1, enter your word: zedan
+Player 2, enter your word: neat
+Player 1's word is not valid.
+Player 2 wins!
+The longest possible word is: DEFIANT
+
+Do you want to play again (y/n)? n

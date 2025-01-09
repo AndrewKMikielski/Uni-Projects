@@ -1,0 +1,238 @@
+You may not use arrays (or vectors or other data structures) for this project.
+
+Background
+"Countdown" is a British TV Show where contestants complete math and English puzzles. We're going to create the Countdown math game so our users can play it. (If you want to watch, this is an episode of the regular show and this is an episode of the comedy version Cats Does Countdown.)
+
+Countdown Math Game Play
+The user gets a random set of "big numbers" (25, 50, 75, or 100) and "little numbers" (1-10). There are 6 numbers total that are selected, but the user may choose whether there are 0-4 big numbers, and then the remaining numbers are the little numbers. For example, if the user chooses two big numbers, they might get:
+
+25, 100, 5, 7, 3, 10  (Two big numbers, chosen randomly, and the remaining four are random little numbers.)
+
+A target number is also chosen randomly, between 101 and 999, for example 265.
+
+The user then tries to do math (using addition, subtraction, multiplication, and division) to come up with the target number. One solution to the problem above would be:
+
+25 * 10 = 250
+
+5 * 3 = 15
+
+250 + 15 = 265
+
+Each number in the puzzle can only be used once (so you can't just add 10+10+10 . . . repeatedly to get close to the target), but you can use the results of the calculation once later (so since the first calculation resulted in 250, we were able to use 250 later).
+
+Our Program
+Our program will start asking the user for a seed number, which is used to randomize the game (so that the numbers aren't the same every time).
+
+The program displays the message "Let's Play Countdown!", lets the user choose how many big numbers they want (0-4), and then chooses and displays the random numbers:
+
+Enter random seed: 7
+
+Let's play Countdown!
+How many big numbers would you like (0-4)? 2
+
+Your numbers are: 100 25 2 7 4 8
+The target is: 738
+
+
+The user can then enter calculations. For the example above, the user might enter 7*100:
+
+Enter a calculation (or 0 to quit): 7*100
+7 * 100 = 700
+
+Your numbers are: 700 25 2 4 8
+The target is: 738
+
+
+The calculation and result should be displayed. The numbers in the calculation (7 and 100) should be removed from the remaining numbers, and the result (700) should be put into the first available spot (so 700 ended up where the 100 had been removed). This process is repeated until the game ends.
+
+Winning and Losing
+The user wins if a calculation results in the target number. If that happens, the message "You win!" should be displayed after the calculation.
+
+The user loses if they have only one number remaining, and it is not the target number. Display the message "You lose." after the last calculation.
+
+The program should end after the user wins or loses (the user will need to restart the program if they want to play again). The user may also quit the program at any time by entering 0 instead of a calculation.
+
+Keeping Track of the Numbers
+You may not use arrays (or vectors, or other data structures) in this project (you may use strings, of course, but not to keep track of the numbers). As described in the formatting section, you are allowed to use global variables (variables created outside of any function) to keep track of the target and the available numbers, and I recommend doing that. For example, you might have num1, num2, num3, and so on for the six numbers available to use. By making them global (writing them at the top of the code, outside of any function), you can use them in any function. Initially those should start with the random numbers for calculations, and be updated as calculations are performed.
+
+When a calculation is performed (for example, 100*7 in the example above), find the number 100 and replace it with a 0 (0 will mean that a number is not being used). Do the same for the number 7. Since the result is 700, you should go through numbers 1 through 6 and look for a spot that has 0 (meaning it's not in use); put the 700 in the first available spot you find.
+
+To walk through that in more detail, let's start with 100 25 2 7 4 8
+
+We would be using 7 and 100 in the calculation, so we'd replace them both with 0: 0 25 2 0 4 8. Now, we do the math and need to add the number 700, so we look for the first spot that is available. num1 has a 0, so we can put it there: 700 25 2 0 4 8.
+
+This is much easier to do with functions, so you can call a function to remove a number, and it will go through num1, num2, and so on to find the number we're looking for and replace it with a 0. Similarly, another function could add a number, going through num1, num2, and so on looking for a 0, and replacing it with the new number to add.
+
+You may find a different way to keep track of numbers, but it must use individual variables (not arrays/vectors/etc) and it must match the described behavior: always removing the first matching number (so if there are two of the same number, it will "use" the first one) and then adding in a new number in the first available spot (the first number that has a 0/blank).
+
+A side effect of this behavior is that if you do math that results in a 0, that result is not shown (which works well--if the user does 4-4, the 0 result doesn't need to be displayed).
+
+Choosing Random Numbers
+To ensure that you match the random numbers expected by the autograder, you should use the random number functions provided in your project. The template already includes "mersenne-twister.h" which produces random numbers. At the start of the program, call the seed function using the number the user provides (this should only be called once, before choosing any random numbers). To get a random number, call the function chooseRandomNumber and provide the minimum and maximum number that should be included. For example, to get a number between 1 and 10, call chooseRandomNumber(1, 10). The order is important also. Get any big numbers first by randomly choosing a number between 1 and 4 and multiplying it by 25 (so that you get 25, 50, 75, or 100). Get the little numbers next. Lastly, randomly choose the target number.
+
+Input
+You may expect that the user only enters valid input. For example, when the user enters a calculation, expect that the two numbers given are available numbers, and that the operation is valid (+, -, *, or /).
+
+Calculations may have whitespace in them, but do not need it. For example, the user might enter 7*100 or 7 * 100, or any combination of whitespace. The best way to input those is to use cin >> to get a number, then a char, and then another number. Using >> will skip over whitespace so it will work well whether there is whitespace or there isn't. You may need to check if the first number in the calculation is 0 (meaning the user is quitting the program) before trying to get other input, since there won't be additional input in that case.
+
+Formatting
+Your code should be properly formatted, as described in this document, though you may make a few exceptions described here:
+
+You may not use arrays in this program (or vectors, or other data structures for remembering more than one number). Because of that, you may use global variables to remember the target and the available numbers. (Global variables are variables that are declared outside of any function.)
+
+You are not required to use functions, and you won't be marked down for having functions that would otherwise be considered too long. That said, I highly recommend using functions, both to break long sections of code into smaller pieces, and to be able to prevent repeating code.
+
+
+
+Sample Output
+Enter random seed: 7
+
+Let's play Countdown!
+How many big numbers would you like (0-4)? 2
+Your numbers are: 100 25 2 7 4 8
+The target is: 738
+Enter a calculation (or 0 to quit): 7*100
+7 * 100 = 700
+
+Your numbers are: 700 25 2 4 8
+The target is: 738
+Enter a calculation (or 0 to quit): 25 * 2
+25 * 2 = 50
+
+Your numbers are: 700 50 4 8
+The target is: 738
+Enter a calculation (or 0 to quit): 4 + 8
+4 + 8 = 12
+
+Your numbers are: 700 50 12
+The target is: 738
+Enter a calculation (or 0 to quit): 700+50
+700 + 50 = 750
+
+Your numbers are: 750 12
+The target is: 738
+Enter a calculation (or 0 to quit): 750-12
+750 - 12 = 738
+
+You win!
+
+
+Enter random seed: 18
+
+Let's play Countdown!
+How many big numbers would you like (0-4)? 1
+Your numbers are: 75 4 1 6 7 10
+The target is: 647
+Enter a calculation (or 0 to quit): 75-4
+75 - 4 = 71
+
+Your numbers are: 71 1 6 7 10
+The target is: 647
+Enter a calculation (or 0 to quit): 71 - 6
+71 - 6 = 65
+
+Your numbers are: 65 1 7 10
+The target is: 647
+Enter a calculation (or 0 to quit): 65 -1
+65 - 1 = 64
+
+Your numbers are: 64 7 10
+The target is: 647
+Enter a calculation (or 0 to quit): 64*10
+64 * 10 = 640
+
+Your numbers are: 640 7
+The target is: 647
+Enter a calculation (or 0 to quit): 640+7
+640 + 7 = 647
+
+You win!
+
+
+Enter random seed: 85
+
+Let's play Countdown!
+How many big numbers would you like (0-4)? 4
+Your numbers are: 75 25 50 25 10 8
+The target is: 604
+Enter a calculation (or 0 to quit): 75+25
+75 + 25 = 100
+
+Your numbers are: 100 50 25 10 8
+The target is: 604
+Enter a calculation (or 0 to quit): 25+10
+25 + 10 = 35
+
+Your numbers are: 100 35 50 8
+The target is: 604
+Enter a calculation (or 0 to quit): 100+ 35
+100 + 35 = 135
+
+Your numbers are: 135 50 8
+The target is: 604
+Enter a calculation (or 0 to quit): 135+50
+135 + 50 = 185
+
+Your numbers are: 185 8
+The target is: 604
+Enter a calculation (or 0 to quit): 185+8
+185 + 8 = 193
+
+You lose.
+
+
+Enter random seed: 65
+
+Let's play Countdown!
+How many big numbers would you like (0-4)? 1
+
+Your numbers are: 75 2 4 1 6 4
+The target is: 869
+Enter a calculation (or 0 to quit): 75+4
+75 + 4 = 79
+
+Your numbers are: 79 2 1 6 4
+The target is: 869
+Enter a calculation (or 0 to quit): 0
+Using Functions
+We will discuss writing our own functions in about a week after the assignment is posted, but the idea is similar to other languages. In C++ we need to specify the type of information the function will receive as input, as well as the type of input the function will return. For example, a function that takes two numbers and adds them might look like:
+
+int add(int num1, int num2) {
+    return num1 + num2;
+}
+
+
+The int at the very beginning (before add) specifies that the function will return an integer. num1 and num2 are the two parameters (inputs) and are both integers as well. The return statement stops the function and returns the information specified.
+
+If your function does not need to return information, then it is a void function:
+
+void printGreeting(string name) {
+     cout << "Hello " << name << endl;
+}
+
+
+In void functions you don't need a return statement (but you can just write return; if you want).
+
+Without an extra step, you can't call a function before it in the file (so the main function can only call the add function if the main function comes after add in the file). If you want to call a function that's later in the code, you can copy and paste the line with the return type, name, and parameters (replacing the open brace with a semicolon) and put that above the main function (usually towards the top of the file).
+
+For example:
+
+// Put header at the top of the file, before the code 
+
+// includes and using statements usually next
+
+// The function list is usually after that
+int add(int num1, int num2);
+
+// And then the code for the different functions
+int main() {
+    int total = add(4, 8);
+    cout << total << endl;
+}
+
+int add(int num1, int num2) {
+    return num1 + num2;
+}
+
+
+If you change the name/parameters/return type of the function, make sure to update the line at the top of the file to match, or you'll get a compile error.
